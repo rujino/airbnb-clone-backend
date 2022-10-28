@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 CUSTOM_APPS = [
+    "direct_messages.apps.DirectMessagesConfig",
+    "medias.apps.MediasConfig",
     "bookings.apps.BookingsConfig",
     "wishlists.apps.WishlistsConfig",
     "reviews.apps.ReviewsConfig",
