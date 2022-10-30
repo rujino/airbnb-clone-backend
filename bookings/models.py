@@ -15,10 +15,12 @@ class Booking(CommonModel):
     )
     user = models.ForeignKey(
         "users.User",
+        related_name="bookings",
         on_delete=models.CASCADE,
     )
     room = models.ForeignKey(
         "rooms.Room",
+        related_name="bookings",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -26,6 +28,7 @@ class Booking(CommonModel):
 
     experience = models.ForeignKey(
         "experiences.Experience",
+        related_name="bookings",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

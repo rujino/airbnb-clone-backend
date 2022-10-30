@@ -18,10 +18,16 @@ class User(AbstractUser):
     first_name = models.CharField(
         max_length=150,
         editable=False,
+        null=True,
+        blank=True,
+        default="",
     )
     last_name = models.CharField(
         max_length=150,
         editable=False,
+        null=True,
+        blank=True,
+        default="",
     )
     avator = models.ImageField(blank=True)
     name = models.CharField(

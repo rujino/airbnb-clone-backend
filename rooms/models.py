@@ -39,22 +39,29 @@ class Room(CommonModel):
         choices=RoomKindChoices.choices,
     )
     owner = models.ForeignKey(
-        "users.User",
+        "users.User",  # User는 room_set을 받는다.
         on_delete=models.CASCADE,
+        related_name="rooms",
     )
     amenities = models.ManyToManyField(
         "rooms.Amenity",
+        related_name="rooms",
     )
 
     category = models.ForeignKey(
-        "categories.Category",
+        "categories.Category",  # Category는 room_set을 받는다.
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name="rooms",
     )
 
-    def __str__(self):
+    def __str__(self):  # 매개변수에 꼭 self일 필요는 없다 아무 문자나 넣어도 됨
         return self.name
+
+    # def total_amenities(self):            매개변수에 꼭 self일 필요는 없다 아무 문자나 넣어도 됨
+    #     print(self)
+    #     return self.amenities.count()
 
 
 class Amenity(CommonModel):
