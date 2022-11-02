@@ -59,9 +59,19 @@ class Room(CommonModel):
     def __str__(self):  # 매개변수에 꼭 self일 필요는 없다 아무 문자나 넣어도 됨
         return self.name
 
-    # def total_amenities(self):            매개변수에 꼭 self일 필요는 없다 아무 문자나 넣어도 됨
-    #     print(self)
-    #     return self.amenities.count()
+    def total_amenities(self):  # 매개변수에 꼭 self일 필요는 없다 아무 문자나 넣어도 됨
+        print(self)
+        return self.amenities.count()
+
+    def rating(room):
+        count = room.reviews.count()
+        if count == 0:
+            return "No Review"
+        else:
+            total_rating = 0
+            for review in room.reviews.all().values("rating"):  # 쿼리 최적화 8.0 강의
+                total_rating += review["rating"]
+            return round(total_rating / count, 2)
 
 
 class Amenity(CommonModel):
