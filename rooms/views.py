@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from django.db import transaction
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, NotAuthenticated, ParseError
 from rest_framework import status
@@ -76,21 +77,19 @@ class Rooms(APIView):
                         raise ParseError("The category kind should be 'rooms'")
                 except Category.DoesNotExist:
                     raise ParseError("Category not found")
-                room = serializer.save(
-                    owner=request.user,
-                    category=category,
-                )  # serializer는 누가 room의 owner인지 모르기때문에 알려주기 위해선 적어줘야한다.
-                amenities = request.data.get("amenities")
-                for amenity_pk in amenities:  # Many to Many를 코드로 구현해 보았다.
-                    try:
+                with transaction.atomic():  # 원래는 한줄한줄 db에 즉시 적용되었는데 transaction.atomic()을 쓰면 db에 즉시 반영 x
+                    room = serializer.save(
+                        owner=request.user,
+                        category=category,
+                    )  # serializer는 누가 room의 owner인지 모르기때문에 알려주기 위해선 적어줘야한다.
+                    amenities = request.data.get("amenities")
+                    for amenity_pk in amenities:  # Many to Many를 코드로 구현해 보았다.
                         amenity = Amenity.objects.get(pk=amenity_pk)
                         room.amenities.add(amenity)  # amenity는 room 에다가 직접 붙이는 군...
-                    except Amenity.DoesNotExist:
-                        room.delete()
-                        raise ParseError(f"Amenity with id {amenity_pk} not found")
-                serializer = RoomDetailSerializer(room)
-                return Response(serializer.data)
-            return Response(serializer.errors)
+                    serializer = RoomDetailSerializer(room)
+                    return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
         else:
             raise NotAuthenticated
 
