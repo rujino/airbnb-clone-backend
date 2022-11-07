@@ -7,7 +7,7 @@ from rest_framework.exceptions import NotFound
 from .serializers import CategorySerializer
 
 
-class Category(APIView):
+class Categories(APIView):
     def get(self, request):
         all_categories = Category.objects.all()
         serializer = CategorySerializer(all_categories, many=True)

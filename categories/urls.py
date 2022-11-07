@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path(
         "",
-        views.Category.as_view(),
+        views.Categories.as_view(),
     ),
     path(
         "<int:pk>",
