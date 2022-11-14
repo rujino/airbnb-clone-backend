@@ -29,7 +29,7 @@ class User(AbstractUser):
         blank=True,
         default="",
     )
-    avator = models.ImageField(blank=True)
+    avator = models.URLField(blank=True)
     name = models.CharField(
         max_length=150,
         default="",
